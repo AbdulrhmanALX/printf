@@ -7,5 +7,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdarg.h>
+
+void my_itoa(long x);
 int _printf(const char *format, ...);
+
 #endif

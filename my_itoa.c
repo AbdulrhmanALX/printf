@@ -2,10 +2,16 @@
 #include <math.h>
 #include <unistd.h>
 
-int main() {
-    // Write C code here
-    long x = -4060406040;
-    int i;
+/**
+ * itoa - print numbers as characters
+ *
+ * @ x: the number to be printed
+ *
+ * Return: nothing
+ */ 
+void my_itoa(long x)
+{
+    int i = 0;
     
     if (x < 0)
         {
@@ -27,8 +33,6 @@ int main() {
             char digit_ch = (char) digit + '0';
             write (1, &digit_ch, 1);
             x = x - digit * (long) pow(10, i);
-        }
+        }   
     }
-
-    return 0;
 }
