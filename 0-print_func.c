@@ -37,6 +37,14 @@ int _printf(const char *format, ...)
 						write(1, str, str_len);
 						break;
 					}
+				case 'd':
+					{
+						int dec = va_arg(ap, int);
+						char dec_ch = dec + '0';
+
+						write(1, &dec_ch, 8);
+						break;
+					}
 			}
 			continue;
 		}
