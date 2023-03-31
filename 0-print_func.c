@@ -40,9 +40,13 @@ int _printf(const char *format, ...)
 				case 'd':
 					{
 						int dec = va_arg(ap, int);
-						char dec_ch = dec + '0';
-
-						write(1, &dec_ch, 8);
+						my_itoa(dec);
+						break;
+					}
+				case 'i':
+					{
+						int dec = va_arg(ap, int);
+						my_itoa(dec);
 						break;
 					}
 			}

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <unistd.h>
+#include "main.h"
 
 /**
  * itoa - print numbers as characters
@@ -11,26 +12,30 @@
  */ 
 void my_itoa(long x)
 {
-    int i = 0;
-    
+    char minus;
+    int i;
+    char digit_ch;
+    int digit;
+    int n;
+
     if (x < 0)
         {
             x = x * -1;
-            char minus = '-';
+	    minus = '-';
             write(1, &minus,1);
         }
-    int n = (int) log10(x);
+    n = (int) log10(x);
     for (i = n; i >= 0; i--)
     {
         if (i == 0)
         {
-            char digit_ch = (char) x % 10 + '0';
+            digit_ch = (char) x % 10 + '0';
             write (1, &digit_ch, 1);
         }
         else
         {
-            int digit = (x / (long) pow(10, i));
-            char digit_ch = (char) digit + '0';
+            digit = (x / (long) pow(10, i));
+            digit_ch = (char) digit + '0';
             write (1, &digit_ch, 1);
             x = x - digit * (long) pow(10, i);
         }   
