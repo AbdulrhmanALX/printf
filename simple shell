@@ -1,0 +1,53 @@
+#include "shell.h"
+#define MAX_W 12
+ 
+char **prompt(void)
+{
+        size_t gline, n;
+        int i = 0, j = 0;
+        char *token, *linp = NULL;
+        char **commands = malloc(sizeof(char *) * MAX_W);
+ 
+        getline(&linp, &n, stdin);
+ 
+        token = strtok(linp, " ");
+        while (token)
+        {
+                commands[i] = malloc(sizeof(char) * strlen(token));
+                strcpy(commands[i], token);
+                token = strtok(NULL, " ");
+                i++;
+        }
+ 
+        printf("%s", linp);
+        commands[i] = NULL;
+ 
+ 
+        free(linp);
+        while (commands[j])
+        {
+                printf("%s", commands[j]
+                }
+         }
+         
+         --------------------------------
+#include "shell.h"
+ 
+int main()
+{
+        printf("> ");
+        prompt();
+        return(0);
+}
+
+-------------------------------
+#ifndef SHELL_H
+#define SHELL_H
+ 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+ 
+char **prompt(void);
+ 
+#endif
