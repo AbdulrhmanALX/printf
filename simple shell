@@ -1,8 +1,27 @@
 /* prompt func updated!
 
-#include "shell.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-char **prompt(void)
+char **prompt(void);
+
+int main() {
+
+        int i;
+        char **prom;
+        printf("$ ");
+        prom =prompt();
+        while (prom[i])
+        {
+            printf("%s\n", prom[i]);
+            free(prom[i++]);
+        }
+        free(prom);
+        return (0);
+}
+
+ char **prompt(void)
 {
         size_t gline, n;
         int i = 0, j = 0, k = 0;
@@ -14,13 +33,27 @@ char **prompt(void)
 	gline = getline(&linp, &n, stdin);
 	if (gline == -1)
 	{
-		perror("can not allocate mem (l:16)");
-		exit (EXIT_FAILURE);
+	    if(feof(stdin))
+	        exit (EXIT_SUCCESS);
+	    else 
+	    {
+	        perror("can not getline  (l:32)");
+		    exit (EXIT_FAILURE);
+	    }
 	}
  
         lin = strdup(linp);
-        printf("%s", lin);
+        if (lin == NULL)
+	{
+		perror("can not duplicate the input (l:44)");
+		exit (EXIT_FAILURE);
+	}
         token_l = strtok(lin, " ");
+        if (token_l == NULL)
+	{
+		perror("can not tokenize (l:50)");
+		exit (EXIT_FAILURE);
+	}
         while (token_l)
         {
             printf("[%dth] word is %s\n",k+1, token_l);
@@ -29,17 +62,26 @@ char **prompt(void)
         }
         
         token = strtok(linp, " ");
+        if (token == NULL)
+	{
+		perror("can not tokenize (l:63)");
+		exit (EXIT_FAILURE);
+	}
         commands = malloc(sizeof(char *) * (k+1));
         if (commands == NULL)
         {
-		perror("can not allocate mem (l:9)");
+		perror("can not allocate mem (l:69)");
 		exit (EXIT_FAILURE);
         }
         
         while (token)
         {
                 commands[i] = malloc(sizeof(char) * strlen(token));
-                strcpy(commands[i], token);
+                if (strcpy(commands[i], token) == NULL)
+                {
+                    perror("copy tokens (l:79)");
+		            exit (EXIT_FAILURE);  
+                }
                 token = strtok(NULL, " ");
                 i++;
         }
@@ -48,30 +90,10 @@ char **prompt(void)
  
  
         free(linp);
-        while (commands[j])
-        {
-               	if (j != 0)
-			printf("\n");	
-		printf("%s", commands[j]);
-		free(commands[j]);
-		j++;
-	}
-	printf("go to main\n");
+        free(lin);
+        
 	return(commands);
 }
- 
- 
-         
-         --------------------------------
-#include "shell.h"
- 
-int main()
-{
-        printf("> ");
-        prompt();
-        return(0);
-}
-
 -------------------------------
 #ifndef SHELL_H
 #define SHELL_H
