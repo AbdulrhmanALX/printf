@@ -3,25 +3,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 char **prompt(void);
-
+void exec(char**);
 int main() {
-
-        int i;
+    int i;
         char **prom;
         printf("$ ");
         prom =prompt();
-        while (prom[i])
-        {
-            printf("%s\n", prom[i]);
-            free(prom[i++]);
-        }
+        exec(prom);
+        
         free(prom);
         return (0);
 }
 
- char **prompt(void)
+char **prompt(void)
 {
         size_t gline, n;
         int i = 0, j = 0, k = 0;
@@ -56,7 +53,6 @@ int main() {
 	}
         while (token_l)
         {
-            printf("[%dth] word is %s\n",k+1, token_l);
             k++;
             token_l = strtok(NULL, " ");
         }
@@ -94,6 +90,27 @@ int main() {
         
 	return(commands);
 }
+
+void exec(char **argv)
+{
+  int status;
+  pid_t process = fork();
+  
+  if (process == 0)
+  {
+      if (execve(argv[0], argv, NULL) == -1)
+        perror(" execve fun failed ");
+  }
+  else if (process == -1)
+  {
+      perror(" fork fun failed ");
+  }
+  else
+  {
+      wait(&status);
+  }
+  
+ }
 -------------------------------
 #ifndef SHELL_H
 #define SHELL_H
