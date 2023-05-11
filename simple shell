@@ -14,7 +14,11 @@ int main() {
         prom =prompt();
         exec(prom);
         
-        free(prom);
+        while (prom[i])
+        {
+            free(prom[i++]);
+        }
+	free(prom);
         return (0);
 }
 
@@ -35,7 +39,7 @@ char **prompt(void)
 	    else 
 	    {
 	        perror("can not getline  (l:32)");
-		    exit (EXIT_FAILURE);
+		exit (EXIT_FAILURE);
 	    }
 	}
  
@@ -99,11 +103,15 @@ void exec(char **argv)
   if (process == 0)
   {
       if (execve(argv[0], argv, NULL) == -1)
-        perror(" execve fun failed ");
+      {
+      	perror(" execve fun failed ");
+	exit (EXIT_FAILURE);
+      }
   }
   else if (process == -1)
   {
       perror(" fork fun failed ");
+      exit (EXIT_FAILURE);
   }
   else
   {
