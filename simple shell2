@@ -1,0 +1,98 @@
+#include "shell.h"
+
+int main(void)
+{
+	char *line, **commands = malloc(sizeof(char *) * 3);
+	unsigned int i = 0;
+	printf("$ ");
+
+	line = read_line();
+	printf("get line func is ok\n");
+	commands = tokens(line);
+	printf("tokenize fun is ok\n");
+	
+	while(commands[i])
+	{
+		printf("%s", commands[i]);
+		i++;
+	}
+	
+	return (0);
+}
+-------------------------
+#include "shell.h"
+
+/**
+  * read_line -> read the line wrote in standard input
+  * Return: a string of the line
+  */
+
+char *read_line(void)
+{
+	char *linp = NULL;
+	size_t n = 0;
+
+	if (getline(&linp, &n, stdin) == -1)
+	{
+		if (feof(stdin))
+			return (linp);
+
+		perror("getline failure");
+		exit (EXIT_FAILURE);
+
+	}
+	return (linp);
+}
+---------------------------
+#include "shell.h"
+
+/**
+  * tokens - spliting a line to words using " " as as delimeter
+  * @line: the line to be split
+  * Return: an array of string
+  */
+
+char **tokens(char *line)
+{
+	char ** argv;
+	char *linp, *tokenp, *token;
+	unsigned int argc = 0, i, j;
+	linp = strdup(line);
+	if (linp == NULL)
+	{
+		perror("strdup failure there is no memory to dupplicat the line");
+		exit (EXIT_FAILURE);
+	}
+
+	token = strtok(line, " ");
+	while (token)
+	{
+		token = strtok(NULL, " ");
+		argc++;
+	}
+
+	argv = malloc(sizeof(char *) * (argc + 1));
+	if (argv == NULL)
+	{
+		perror("strdup failure there is no memory to dupplicat the line");
+		exit (EXIT_FAILURE);
+	}
+	tokenp = strtok(linp, " ");
+	while (tokenp)
+	{
+		argv[i] = malloc(sizeof(char) * (strlen(tokenp)+1));
+		if (argv[i] == NULL)
+		{
+			perror("malloc faliure for a token");
+			for (j = 0; j <= i; j++)
+				free(argv[j]);
+			free(argv);
+			exit (EXIT_FAILURE);
+		}
+		strcpy(argv[i], tokenp);
+		tokenp = strtok(NULL, " ");
+		i++;
+	}
+	argv[i] = NULL;
+	return (argv);
+}
