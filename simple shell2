@@ -1,41 +1,32 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/wait.h>
+#include "shell.h"
  
-int main()
+/**
+  * main - the main func
+  * Return: 0 on success
+  */
+ 
+int main(void)
 {
-        char *token, *line = NULL;
-        char **words = malloc(sizeof(char *) * 4);
-        int n = 0, i = 0, k, ws = 1;
-        char *arg[] = {"/bin/cp", "print.c", "p.c", NULL};
-        pid_t p;
-        getline(&line, &n, stdin);
-        printf("%s\n", line);
- 
-        token = strtok(line, " \n");
-        while (token)
+        unsigned int i = 0, argc;
+        char *line, **argv = malloc(sizeof(char *) * (argc + 1));
+        pid_t st;
+        do
         {
-                words[i] = malloc(sizeof(char) * strlen(token) + 1);
-                strcpy(words[i], token);
-                i++;
-                token = strtok(NULL, " \n");
-        }
-        words[i] = NULL;
-        for (k = 0; k < i; k++)
-        {
-                printf("%s ", words[k]);
-                if (strcmp(words[k], arg[k]) != 0)
-                        printf("\nthe error in member %d\n", k);
-        }
-        free(line);
+                printf("$ ");
  
-        p = fork();
-        if (p == 0)
-                execve(words[0], words, NULL);
-        else
-                wait(&ws);
+                line = read_line();
+                argc = n_tokens(line);
+                argv = tokens(line, argc);
+                st = exc(argv);
  
+                while(argv[i])
+                {
+                        free(argv[i]);
+                        i++;
+                }
+                free(line);
+                free(argv);
+        }
+        while (st != -1);
         return (0);
 }
